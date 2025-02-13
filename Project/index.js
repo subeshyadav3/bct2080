@@ -315,7 +315,7 @@ function isPointNearLine(px, py, line) {
 applyTransformBtn.addEventListener('click', () => {
     console.log('i am in');
     console.log(selectedShape);
-
+    is2dTransformMode = true;
     if (!selectedShape) {
         alert('No shape selected!');
         return;
@@ -329,8 +329,8 @@ applyTransformBtn.addEventListener('click', () => {
     let scaleY = parseFloat(document.getElementById('scaleY').value);
     let rotateAngle = parseFloat(document.getElementById('rotateAngle').value);
     let reflectionAxis = document.getElementById('reflectionAxis').value;
-    let shearX = parseFloat(document.getElementById('shearX').value);
-    let shearY = parseFloat(document.getElementById('shearY').value);
+    // let shearX = parseFloat(document.getElementById('shearX').value);
+    // let shearY = parseFloat(document.getElementById('shearY').value);
 
     if (translateX === 0 && translateY === 0 && scaleX === 1 && scaleY === 1 && rotateAngle === 0 &&
         reflectionAxis === 'none' && shearX === 0 && shearY === 0) {
@@ -338,7 +338,7 @@ applyTransformBtn.addEventListener('click', () => {
         return;
     }
 
-    console.log(translateX, translateY, scaleX, scaleY, rotateAngle, reflectionAxis, shearX, shearY);
+    // console.log(translateX, translateY, scaleX, scaleY, rotateAngle, reflectionAxis, shearX, shearY);
 
     if (is2dTransformMode) {
         let steps = 30;
@@ -362,9 +362,9 @@ applyTransformBtn.addEventListener('click', () => {
             if (reflectionAxis !== 'none' && step === steps - 1) {
                 applyReflection(tempShape, reflectionAxis);
             }
-            if (shearX > 0 || shearY > 0) {
-                applyShearing(tempShape, shearX * progress, shearY * progress);
-            }
+            // if (shearX > 0 || shearY > 0) {
+            //     applyShearing(tempShape, shearX * progress, shearY * progress);
+            // }
 
             Object.assign(selectedShape, tempShape);
             redrawCanvas();
@@ -379,7 +379,7 @@ applyTransformBtn.addEventListener('click', () => {
         if (scaleX > 1 || scaleY > 1) applyScaling(originalShape, scaleX, scaleY);
         if (rotateAngle > 0) applyRotation(originalShape, rotateAngle);
         if (reflectionAxis !== 'none') applyReflection(originalShape, reflectionAxis);
-        if (shearX > 0 || shearY > 0) applyShearing(originalShape, shearX, shearY);
+        // if (shearX > 0 || shearY > 0) applyShearing(originalShape, shearX, shearY);
 
         Object.assign(selectedShape, originalShape);
         redrawCanvas();
@@ -393,6 +393,6 @@ applyTransformBtn.addEventListener('click', () => {
     document.getElementById('scaleY').value = 1;
     document.getElementById('rotateAngle').value = 0;
     document.getElementById('reflectionAxis').value = 'none';
-    document.getElementById('shearX').value = 0;
-    document.getElementById('shearY').value = 0;
+    // document.getElementById('shearX').value = 0;
+    // document.getElementById('shearY').value = 0;
 });

@@ -13,6 +13,9 @@ function applyTranslation(shape, tx, ty) {
     } else if (shape.type === 'rectangle') {
         shape.x += tx;
         shape.y += ty;
+        shape.x1 += tx;
+        shape.y1 += ty;
+
     }
    
 }
@@ -66,22 +69,32 @@ function applyScaling(shape, sx, sy) {
 
     } else if (shape.type === 'rectangle') {
 
-        const centerX = shape.x + shape.width / 2;
-        const centerY = shape.y + shape.height / 2;
+        const centerX = shape.x;
+        const centerY = shape.y;
 
 
         shape.x -= centerX;
         shape.y -= centerY;
-        
+        shape.x1 -= centerX;
+        shape.y1 -= centerY;
+
 
         shape.x *= sx;
         shape.y *= sy;
-        shape.width *= sx;
-        shape.height *= sy;
+        shape.x1 *= sx;
+        shape.y1 *= sy;
         
 
         shape.x += centerX;
         shape.y += centerY;
+        shape.x1 += centerX;
+        shape.y1 += centerY;
+
+        shape.x= Math.round(shape.x);
+        shape.y= Math.round(shape.y);
+        shape.x1= Math.round(shape.x1);
+        shape.y1= Math.round(shape.y1);
+
     }
 
     // console.log('After Scaling:', JSON.stringify(shape)); 
@@ -145,6 +158,7 @@ function applyReflection(shape, axis) {
             shape.y = 100+shape.y;
         } else if (shape.type === 'rectangle') {
             shape.y = 100+shape.y;
+            shape.y1= 100+shape.y1;
         }
     } else if (axis === 'y') {
         if (shape.type === 'line') {
@@ -154,6 +168,7 @@ function applyReflection(shape, axis) {
             shape.x = -100+shape.x;
         } else if (shape.type === 'rectangle') {
             shape.x = -100+shape.x;
+            shape.x1 = -100+shape.x
         }
     }
 }
