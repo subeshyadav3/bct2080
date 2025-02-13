@@ -111,39 +111,28 @@ function updateEraserPosition() {
     isUpdating = false;
 }
 
-let isFillMode = false;
 
 document.getElementById('fillBtn').addEventListener('click', () => {
-    isFillMode = !isFillMode;
-    // drawing = false;
-    console.log("Fill Mode")
-    console.log(isFillMode)
-    // if (!selectedShape) {
-    //     alert('No shape selected!');
-    //     return;
-    // }
+    if (!selectedShape) {
+        alert('No shape selected!');
+        return;
+    }
 
-    // const targetColor = hexToRgb(selectedColor);
+    const targetColor = hexToRgb(selectedColor);
 
-    // if (selectedShape.type === 'line') {
-    //     selectedShape.filled = true;
-    //     floodFill(selectedShape.x1, selectedShape.y1, targetColor);
-    // } else if (selectedShape.type === 'circle') {
-    //     selectedShape.filled = true;
-    //     selectedShape.filledColor = selectedColor;
-    //     floodFill(selectedShape.x, selectedShape.y, targetColor);
-    // } else if (selectedShape.type === 'rectangle') {
-    //     selectedShape.filled = true;
-    //     selectedShape.filledColor = selectedColor;
-    //     floodFill(selectedShape.x, selectedShape.y, targetColor);
-    // }
-
-
-    // floodFill
+    if (selectedShape.type === 'line') {
+        selectedShape.filled = true;
+        floodFill(selectedShape.x1, selectedShape.y1, targetColor);
+    } else if (selectedShape.type === 'circle') {
+        selectedShape.filled = true;
+        selectedShape.filledColor = selectedColor;
+        floodFill(selectedShape.x, selectedShape.y, targetColor);
+    } else if (selectedShape.type === 'rectangle') {
+        selectedShape.filled = true;
+        selectedShape.filledColor = selectedColor;
+        floodFill(selectedShape.x, selectedShape.y, targetColor);
+    }
 });
-
-
-
 
 function hexToRgb(hex) {
     const r = parseInt(hex.slice(1, 3), 16);
@@ -204,15 +193,6 @@ canvas.addEventListener('mousedown', (e) => {
             }
         });
     }
-
-    if (isFillMode) {
-        console.log('here')
-        const x = e.offsetX;
-        const y = e.offsetY;
-        const fillColor = hexToRgb(selectedColor);
-        floodFill(x, y, fillColor);
-    }
-
 });
 
 canvas.addEventListener('mousemove', (e) => {
