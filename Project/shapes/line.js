@@ -4,7 +4,8 @@ function drawLineBresenham(x0, y0, x1, y1, ctx) {
 
     ctx.lineWidth =isHighlighting ? 3 : lineWidth;
     ctx.strokeStyle = isHighlighting ? 'red' : selectedColor;
-
+    
+  
 
     let dx = Math.abs(x1 - x0);
     let dy = Math.abs(y1 - y0);

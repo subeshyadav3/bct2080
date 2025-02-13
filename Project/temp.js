@@ -25,7 +25,7 @@ let isLineMode = false;
 let isCircleMode = false;
 let isRectMode = false;
 let isFreehandMode = true;
-let is2dTransformMode = true;
+let is2dTransformMode = false;
 
 
 document.addEventListener('keydown', (e) => {
@@ -179,6 +179,11 @@ function redrawCanvas() {
             drawLineBresenham(shape.x1, shape.y1, shape.x2, shape.y2, ctx);
         } else if (shape.type === 'circle') {
             drawCircle(shape.x, shape.y, shape.radius, ctx);
+            if(shape.filled){
+                ctx.fillStyle = shape.filledColor;
+                ctx.fill();
+            }
+
             console.log(shape)
         } else if (shape.type === 'rectangle') {
             drawRect(shape.x, shape.y, shape.x1, shape.y1, ctx);
@@ -248,7 +253,7 @@ canvas.addEventListener('mousemove', (e) => {
         freeHandShapes = handleFreehandDrawing(e, drawing, freeHandShapes);
         redrawCanvas();
     } else {
-        // redrawCanvas();
+        redrawCanvas();
 
         ctx.lineWidth = lineWidth;
         ctx.strokeStyle = selectedColor;
