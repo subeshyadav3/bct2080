@@ -6,6 +6,12 @@ function applyTranslation(shape, tx, ty) {
         shape.x2 += tx;
         shape.y2 += ty;
 
+        shape.x1 = Math.round(shape.x1);
+        shape.y1 = Math.round(shape.y1);
+        shape.x2 = Math.round(shape.x2);
+        shape.y2 = Math.round(shape.y2);
+
+            console.log('Line:', JSON.stringify(shape));
 
     } else if (shape.type === 'circle') {
         shape.x += tx;
@@ -15,6 +21,11 @@ function applyTranslation(shape, tx, ty) {
         shape.y += ty;
         shape.x1 += tx;
         shape.y1 += ty;
+
+        shape.x = Math.round(shape.x);
+        shape.y = Math.round(shape.y);
+        shape.x1 = Math.round(shape.x1);
+        shape.y1 = Math.round(shape.y1);
 
     }
    
@@ -37,7 +48,7 @@ function applyScaling(shape, sx, sy) {
         shape.x2 -= centerX;
         shape.y2 -= centerY;
         
-
+        console.log(sx, sy);
         shape.x1 *= sx;
         shape.y1 *= sy;
         shape.x2 *= sx;
@@ -48,6 +59,12 @@ function applyScaling(shape, sx, sy) {
         shape.y1 += centerY;
         shape.x2 += centerX;
         shape.y2 += centerY;
+
+
+        shape.x1= Math.round(shape.x1);
+        shape.y1= Math.round(shape.y1);
+        shape.x2= Math.round(shape.x2);
+        shape.y2= Math.round(shape.y2);
 
     } else if (shape.type === 'circle') {
 
@@ -143,7 +160,7 @@ function applyRotation(shape, angle) {
     } else if (shape.type === 'rectangle') {
         //taking all points
         
-
+        
 
     }
 

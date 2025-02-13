@@ -373,10 +373,10 @@ applyTransformBtn.addEventListener('click', () => {
             if (translateX || translateY) {
                 applyTranslation(tempShape, translateX * progress, translateY * progress);
             }
-            if (scaleX > 1 || scaleY > 1) {
+            if (scaleX !== 1 || scaleY !== 1) {
                 applyScaling(tempShape, 1 + (scaleX - 1) * progress, 1 + (scaleY - 1) * progress);
             }
-            if (rotateAngle > 0) {
+            if (rotateAngle !== 0) {
                 applyRotation(tempShape, rotateAngle * progress);
             }
             if (reflectionAxis !== 'none' && step === steps - 1) {
@@ -391,14 +391,6 @@ applyTransformBtn.addEventListener('click', () => {
         }
 
         animateTransformation();
-    } else {
-        if (translateX || translateY) applyTranslation(originalShape, translateX, translateY);
-        if (scaleX > 1 || scaleY > 1) applyScaling(originalShape, scaleX, scaleY);
-        if (rotateAngle > 0) applyRotation(originalShape, rotateAngle);
-        if (reflectionAxis !== 'none') applyReflection(originalShape, reflectionAxis);
-
-        Object.assign(selectedShape, originalShape);
-        redrawCanvas(); 
     }
 
 
