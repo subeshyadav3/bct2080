@@ -101,6 +101,7 @@ function redrawCanvas() {
 
                 ctx.beginPath();
                 ctx.strokeStyle=shape.color;
+                ctx.lineWidth=shape.lineWidth;
                 ctx.moveTo(prevPoint.x, prevPoint.y);
                 ctx.lineTo(point.x, point.y);
                 ctx.stroke();

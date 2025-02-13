@@ -10,6 +10,8 @@ function bresenhamLine(x1, y1, x2, y2,color,lineWidth) {
     ctx.lineWidth = lineWidth;
     while (true) {
         points.push({ x: x1, y: y1 });
+        points.push({ x: x1+1.0, y: y1+1.0 });   ///more nicer dark
+        // points.push({ x: x1-1.0, y: y1-1.0 });
 
         if (x1 === x2 && y1 === y2) break;
         let e2 = err * 2;
@@ -22,20 +24,7 @@ function bresenhamLine(x1, y1, x2, y2,color,lineWidth) {
             y1 += sy;
         }
     }
-    while (true) {
-        points.push({ x: x1, y: y1 });
-
-        if (x1 === x2 && y1 === y2) break;
-        let e2 = err * 2;
-        if (e2 > -dy) {
-            err -= dy;
-            x1 += sx;
-        }
-        if (e2 < dx) {
-            err += dx;
-            y1 += sy;
-        }
-    }
+    
     return points;
 }
 
