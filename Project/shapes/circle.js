@@ -1,6 +1,7 @@
 function drawCircle(x, y, r, ctx) {
     ctx.beginPath();
     ctx.lineWidth = lineWidth;  
+    
     ctx.strokeStyle = isHighlighting ? 'red' : selectedColor;
     ctx.fillStyle = isHighlighting ? 'red' : selectedColor;
 

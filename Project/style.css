@@ -89,7 +89,8 @@
   .color-picker {
     position: relative;
   }
-  
+ 
+
   #colorPicker {
     position: absolute;
     top: 0;
@@ -103,6 +104,7 @@
   #main {
     display: flex;
     justify-content: center;
+    align-items: center;
     margin-bottom: 20px;
   }
   
@@ -227,7 +229,7 @@
     top:50px;
     left:50px;
     /* background-color: rgba(231, 76, 60, 0.5); */
-    /* border: 2px solid #bc8984; */
+    border: 2px solid #bc8984;
     border-radius: 50%;
     background-color: whitesmoke;
     position: absolute;
@@ -251,8 +253,33 @@
   
   
 #selectedColorShow{
-    width: 30px;
-    height: 30px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     background-color: black;
+    margin-bottom: 30px;
+    border: none;
+}
+
+
+
+
+
+.colorSelector{
+  display: flex;
+  flex-direction: column  ;
+  padding-right: 20px;
+  gap:5px;
+
+}
+
+.colorSelector button{
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.colorSelector button:hover{
+  transform: scale(1.1);
 }

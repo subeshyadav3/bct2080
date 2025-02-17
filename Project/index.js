@@ -1,11 +1,11 @@
 const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
+const ctx = canvas.getContext("2d", { willReadFrequently: true });
 const shapeList = document.getElementById('shapeList');
 const width = canvas.width;
 const height = canvas.height;
 const applyTransformBtn = document.getElementById('applyTransformBtn');
 const selectedColorShow = document.getElementById('selectedColorShow');
-
+const colorSelector = document.querySelectorAll('.colorSelector button');
 let drawing = false;
 let startX = null, startY = null;
 let selectedShape = null;
@@ -13,51 +13,41 @@ let shapes = [];
 let freeHandShapes = [];
 let eraserShapes = [];
 let isHighlighting = false;
-
-let lineWidth = 0.5;
-let selectedColor = 'black';
+let lineWidth = 2;
+let selectedColor = '#000000';
 let lastX = 0;
 let lastY = 0;
-
 let isLineMode = false;
 let isCircleMode = false;
 let isRectMode = false;
 let isFreehandMode = true;
 let is2dTransformMode = true;
-
-document.addEventListener('keydown', (e) => {
-    if (e.key == 'e') {
-        lineWidth += 1;
-    }
-    if (e.key == 'd') {
-        lineWidth -= 1;
-    }
-});
-
 const eraser = document.getElementById('eraserCursor');
 const eraserCursorBtn = document.getElementById('eraserCursorBtn');
 eraser.style.display = 'none';
-
 let isEraserMode = false;
-let eraserSize = 30;
+let eraserSize = 70;
 let eraserX = 0, eraserY = 0;
 let isUpdating = false;
+let isFillMode = false;
+let isHighlightedMode = false;
+
+colorSelector.forEach((button) => {
+    button.addEventListener('click', () => {
+        selectedColor = button.name;
+        console.log(selectedColor);
+        selectedColorShow.style.backgroundColor = selectedColor;
+        console.log(selectedColor);
+    });
+});
 
 eraserCursorBtn.addEventListener('click', () => {
     isEraserMode = !isEraserMode;
-    // ctx.clearRect(0, 0, canvas.width, canvas.height);
-    // shapes = [];
-    // freeHandShapes = [];
-    // eraserShapes = [];
-    // redrawCanvas();
     eraser.style.width = `${eraserSize}px`;
     eraser.style.height = `${eraserSize}px`;
-        
-if (!isEraserMode) {
+    if (!isEraserMode) {
         eraser.style.display = 'none';
         document.body.style.cursor = "default";
-        
-
     } else {
         is2dTransformMode = false;
         isLineMode = false;
@@ -67,43 +57,24 @@ if (!isEraserMode) {
         drawing = false;
         isHighlighting = false;
         isHighlightedMode = false;
-
-        eraser.style.display = 'block';
-        document.body.style.cursor = "none";
     }
 });
 
-
 canvas.addEventListener('mousemove', (e) => {
     if (isEraserMode) {
-        eraserX = e.clientX;
-        eraserY = e.clientY;
-
+        eraserX = e.offsetX;
+        eraserY = e.offsetY;
         if (!isUpdating) {
             isUpdating = true;
             requestAnimationFrame(updateEraserPosition);
         }
     }
-
-    
-    // console.log("Drawing ",drawing)
-
 });
 
-
-
 function updateEraserPosition() {
-    eraser.style.transform = `translate(${eraserX-55}px, ${eraserY-55}px)`;
-
-    // ctx.clearRect(0, 0, canvas.width, canvas.height);
-    // for (let i = shapes.length - 1; i >= 0; i--) {
-    //     if (isPointInShape(eraserX - 157, eraserY - 197, shapes[i])) {
-    //         shapes.splice(i, 1); 
-    //     }
-    // }
-
     ctx.beginPath();
-    ctx.arc(eraserX - 190, eraserY - 197, eraserSize / 2, 0, 2 * Math.PI);
+    ctx.strokeStyle = 'black';
+    ctx.arc(eraserX, eraserY, eraserSize / 2, 0, 2 * Math.PI);
     ctx.fillStyle = 'white';
     ctx.strokeStyle = 'white';
     ctx.fill();
@@ -111,52 +82,38 @@ function updateEraserPosition() {
     isUpdating = false;
 }
 
-let isFillMode = false;
 
-document.getElementById('fillBtn').addEventListener('click', () => {
-    isFillMode = !isFillMode;
-    // drawing = false;
-    console.log("Fill Mode")
-    console.log(isFillMode)
-    // if (!selectedShape) {
-    //     alert('No shape selected!');
-    //     return;
-    // }
-
-    // const targetColor = hexToRgb(selectedColor);
-
-    // if (selectedShape.type === 'line') {
-    //     selectedShape.filled = true;
-    //     floodFill(selectedShape.x1, selectedShape.y1, targetColor);
-    // } else if (selectedShape.type === 'circle') {
-    //     selectedShape.filled = true;
-    //     selectedShape.filledColor = selectedColor;
-    //     floodFill(selectedShape.x, selectedShape.y, targetColor);
-    // } else if (selectedShape.type === 'rectangle') {
-    //     selectedShape.filled = true;
-    //     selectedShape.filledColor = selectedColor;
-    //     floodFill(selectedShape.x, selectedShape.y, targetColor);
-    // }
-
-
-    // floodFill
+document.addEventListener('keydown', (e) => {
+    if (e.key == 'e') {
+        lineWidth += 1;
+    }
+    if (e.key == 'd') {
+        lineWidth -= 1;
+    }
+    if (e.key == 'h') {
+        isHighlightedMode = !isHighlightedMode;
+    }
+    if (e.key == 'b') {
+        eraserSize += 10;
+    }
+    if (e.ctrlKey && e.key == 'z') {
+        if (isFreehandMode) {
+            freeHandShapes.pop();
+        } else {
+            shapes.pop();
+        }
+        redrawCanvas();
+    }
 });
 
 
-
-
-function hexToRgb(hex) {
-    const r = parseInt(hex.slice(1, 3), 16);
-    const g = parseInt(hex.slice(3, 5), 16);
-    const b = parseInt(hex.slice(5, 7), 16);
-    return [r, g, b];
-}
 
 const colorPickerBtn = document.getElementById('colorPickerBtn');
 const colorPicker = document.getElementById('colorPicker');
 
 colorPicker.addEventListener('input', (e) => {
     selectedColor = e.target.value;
+    // console.log(selectedColor);
     selectedColorShow.style.backgroundColor = selectedColor;
 });
 
@@ -172,16 +129,36 @@ function setMode(mode) {
     isFreehandMode = mode === 'freehand';
 }
 
-let isHighlightedMode = false;
 
-document.addEventListener('keyup', (e) => {
-    if (e.key == 'h') {
-        isHighlightedMode = !isHighlightedMode;
-    }
-    if(e.key=='b'){
-        eraserSize+=10;
+document.getElementById('fillBtn').addEventListener('click', () => {
+    isFillMode = !isFillMode;
+
+    console.log("Fill Mode changed");
+    console.log(isFillMode);
+});
+
+canvas.addEventListener('click', (e) => {
+  
+    if (isFillMode) {
+        const x = e.offsetX;
+        const y = e.offsetY;
+        if(selectedColor=='#000000')  alert('Please select a color to fill');
+        console.log(typeof selectedColor)
+        const fillColor = hexToRgb(selectedColor);
+        
+        console.log(fillColor);
+        floodFill(x, y, fillColor);
+        
     }
 });
+
+function hexToRgb(hex) {
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    return [r, g, b];
+}
+
 
 canvas.addEventListener('mousedown', (e) => {
     startX = e.offsetX;
@@ -191,11 +168,9 @@ canvas.addEventListener('mousedown', (e) => {
     isEraserMode = false;
     eraser.style.display = 'none';
     document.body.style.cursor = "default";
-
     if (isFreehandMode) {
         freeHandShapes.push({ type: 'freehand', points: [{ x: startX, y: startY }], color: selectedColor, lineWidth: lineWidth });
     }
-
     if (isHighlightedMode) {
         shapes.forEach((shape) => {
             if (isPointInShape(e.offsetX, e.offsetY, shape)) {
@@ -204,48 +179,28 @@ canvas.addEventListener('mousedown', (e) => {
             }
         });
     }
-
-    if (isFillMode) {
-        console.log('here')
-        const x = e.offsetX;
-        const y = e.offsetY;
-        const fillColor = hexToRgb(selectedColor);
-        floodFill(x, y, fillColor);
-    }
-
 });
 
 canvas.addEventListener('mousemove', (e) => {
     if (!drawing) return;
-
     if (isFreehandMode) {
-        freeHandShapes[freeHandShapes.length - 1].points.push({ x: e.offsetX, y: e.offsetY });
-        ctx.beginPath();
-        ctx.strokeStyle = selectedColor;
-        ctx.lineWidth = lineWidth;
-        ctx.moveTo(startX, startY);
-        ctx.lineTo(e.offsetX, e.offsetY);
-        ctx.stroke();
-        startX = e.offsetX;
-        startY = e.offsetY;
+        handleFreehandDrawing(e, drawing, freeHandShapes);
     }
 });
 
 canvas.addEventListener('mouseup', (e) => {
     if (!drawing) return;
     drawing = false;
-
+    tempShapes = [];
     if (!isFreehandMode) {
         const x = e.offsetX;
         const y = e.offsetY;
         const width = x - startX;
         const height = y - startY;
         const radius = Math.sqrt(Math.pow(x - startX, 2) + Math.pow(y - startY, 2));
-
         if (Math.abs(width) < 3 && Math.abs(height) < 3) {
             return;
         }
-
         if (isLineMode) {
             shapes.push({ type: 'line', x1: startX, y1: startY, x2: x, y2: y });
             drawLineBresenham(startX, startY, x, y, ctx);
@@ -279,7 +234,6 @@ function selectShape(shape, li) {
 function highlightSelectedShape(shape) {
     ctx.strokeStyle = 'red';
     isHighlighting = true;
-
     if (shape.type === 'line') {
         drawLineBresenham(shape.x1, shape.y1, shape.x2, shape.y2, ctx);
     } else if (shape.type === 'circle') {
@@ -308,11 +262,8 @@ function isPointNearLine(px, py, line) {
     return distance < 2;
 }
 
-
 function redrawCanvas() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height); 
-
-
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     shapes.forEach(shape => {
         if (shape.type === 'line') {
             drawLineBresenham(shape.x1, shape.y1, shape.x2, shape.y2, ctx);
@@ -322,8 +273,6 @@ function redrawCanvas() {
             drawRect(shape.x, shape.y, shape.x1, shape.y1, ctx);
         }
     });
-
-
     freeHandShapes.forEach(shape => {
         shape.points.forEach((point, index) => {
             if (index > 0) {
@@ -344,32 +293,24 @@ applyTransformBtn.addEventListener('click', () => {
         alert('No shape selected!');
         return;
     }
-
-    let originalShape = { ...selectedShape }; 
-
+    let originalShape = { ...selectedShape };
     let translateX = parseFloat(document.getElementById('translateX').value);
     let translateY = parseFloat(document.getElementById('translateY').value);
     let scaleX = parseFloat(document.getElementById('scaleX').value);
     let scaleY = parseFloat(document.getElementById('scaleY').value);
     let rotateAngle = parseFloat(document.getElementById('rotateAngle').value);
     let reflectionAxis = document.getElementById('reflectionAxis').value;
-
-    if (translateX === 0 && translateY === 0 && scaleX === 1 && scaleY === 1 && rotateAngle === 0 &&
-        reflectionAxis === 'none') {
+    if (translateX === 0 && translateY === 0 && scaleX === 1 && scaleY === 1 && rotateAngle === 0 && reflectionAxis === 'none') {
         alert('No transformation Applied!');
         return;
     }
-
     if (is2dTransformMode) {
         let steps = 30;
         let step = 0;
-
         function animateTransformation() {
             if (step >= steps || !is2dTransformMode) return;
-
             let progress = (step + 1) / steps;
             let tempShape = { ...originalShape };
-
             if (translateX || translateY) {
                 applyTranslation(tempShape, translateX * progress, translateY * progress);
             }
@@ -382,18 +323,13 @@ applyTransformBtn.addEventListener('click', () => {
             if (reflectionAxis !== 'none' && step === steps - 1) {
                 applyReflection(tempShape, reflectionAxis);
             }
-
             Object.assign(selectedShape, tempShape);
-            redrawCanvas(); 
-
+            redrawCanvas();
             step++;
             setTimeout(animateTransformation, 50);
         }
-
         animateTransformation();
     }
-
-
     document.getElementById('translateX').value = 0;
     document.getElementById('translateY').value = 0;
     document.getElementById('scaleX').value = 1;
