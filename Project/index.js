@@ -6,6 +6,11 @@ const height = canvas.height;
 const applyTransformBtn = document.getElementById('applyTransformBtn');
 const selectedColorShow = document.getElementById('selectedColorShow');
 const colorSelector = document.querySelectorAll('.colorSelector button');
+const btnLineInc=document.getElementById('btn-line-inc');
+const btnLineDec=document.getElementById('btn-line-dec');
+const btnEraserInc=document.getElementById('btn-eraser-inc');
+const btnEraserDec=document.getElementById('btn-eraser-dec');
+
 let drawing = false;
 let startX = null, startY = null;
 let selectedShape = null;
@@ -82,7 +87,7 @@ function updateEraserPosition() {
     isUpdating = false;
 }
 
-
+// for keydown keyup
 document.addEventListener('keydown', (e) => {
     if (e.key == 'e') {
         lineWidth += 1;
@@ -106,6 +111,34 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
+// for click on buttons
+
+btnEraserInc.addEventListener('click', () => {
+    eraserSize += 10;
+    btnEraserInc.childNodes[1].value=eraserSize;
+}
+);
+
+btnEraserDec.addEventListener('click', () => {
+    eraserSize -= 10;
+    btnEraserDec.childNodes[1].value=eraserSize;
+}
+);
+
+btnLineInc.addEventListener('click', () => {
+    lineWidth += 1;
+    btnLineInc.childNodes[1].value=lineWidth;
+}
+);
+
+btnLineDec.addEventListener('click', () => {
+    lineWidth -= 1;
+    btnLineDec.childNodes[1].value=lineWidth;
+}
+);
+
+
+
 
 
 const colorPickerBtn = document.getElementById('colorPickerBtn');
@@ -115,6 +148,8 @@ colorPicker.addEventListener('input', (e) => {
     selectedColor = e.target.value;
     // console.log(selectedColor);
     selectedColorShow.style.backgroundColor = selectedColor;
+    colorPickerBtn.style.backgroundColor = selectedColor;
+    if(colorPickerBtn.style.backgroundColor<='rgb(20, 20, 20)') colorPickerBtn.style.color='white';
 });
 
 document.getElementById('lineModeBtn').addEventListener('click', () => setMode('line'));

@@ -62,8 +62,9 @@
   
   .tool-btn {
     padding: 10px 15px;
-    background-color: #3498db;
-    color: white;
+    border-color: #8A2BE2;
+    color: black;
+    border:2px solid #8A2BE2;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -72,13 +73,13 @@
     display: flex;
     align-items: center;
     gap: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px #8A2BE2;
   }
   
   .tool-btn:hover {
-    background-color: #2980b9;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+    transform: translateY(-5px); 
+    transform: translateX(-5px); 
+    box-shadow: 2px 2px 0px 1px #8A2BE2;
   }
   
   .tool-btn:active {
@@ -283,3 +284,27 @@
 .colorSelector button:hover{
   transform: scale(1.1);
 }
+
+.right-sidebar {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  margin-left: 20px;
+  gap: 10px;
+  width: 100px;
+}
+
+.right-sidebar button {
+  padding: 5px;
+  border-radius: 5%;
+  border: 2px solid #FF6347;
+  border-color: #FF6347;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.right-sidebar button:hover {
+  transform: translateY(-5px); 
+  transform: translateX(-5px); 
+  box-shadow: 2px 2px 0px 1px #FF6347; 
+}
+
